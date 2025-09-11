@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('SCM GitHub') {
             steps {
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/mimaraslan/devops-03-pipeline-aws']])
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/kaan-devv/devops-03-pipeline-aws']])
             }
         }
         stage('Test Maven') {
@@ -52,6 +52,17 @@ pipeline {
                 }
             }
         }
+
+
+        stage("Quality Gate"){
+                   steps {
+                       script {
+                            waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
+                        }
+                    }
+        }
+
+
         /*
 
          stage('Docker Image') {
