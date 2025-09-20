@@ -4,7 +4,6 @@ pipeline {
             label 'My-Jenkins-Agent'
         }
     }
-    //agent any
     tools {
         maven 'Maven3'
         jdk 'Java21'
@@ -19,10 +18,9 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        // Linux or MacOS
                         sh 'mvn test'
                     } else {
-                        bat 'mvn test'  // Windows
+                        bat 'mvn test'
                     }
                 }
             }
@@ -38,21 +36,21 @@ pipeline {
                 }
             }
         }
-        stage("SonarQube Analysis") {
+        stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') {
+                    withSonarQubeEnv('MySonarQubeServer') {
                         if (isUnix()) {
-                            // Linux or MacOS
-                            sh "mvn sonar:sonar"
+                            sh 'mvn sonar:sonar'
                         } else {
-                            bat 'mvn sonar:sonar'  // Windows
+                            bat 'mvn sonar:sonar'
                         }
                     }
                 }
             }
         }
-
+    }
+}
 
         stage("Quality Gate"){
                    steps {
