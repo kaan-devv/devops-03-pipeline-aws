@@ -15,8 +15,8 @@ pipeline {
             RELEASE = "1.0"
             DOCKER_USER = "kaanylmz"
             DOCKER_LOGIN = 'dockerhub'
-            IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
-            IMAGE_TAG = "${RELEASE}"."${BUILD_NUMBER}"
+            IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+            IMAGE_TAG = "${RELEASE}.${BUILD_NUMBER}"
 
           //   kaanylmz/devops-03-pipeline-aws:latest
           //     ${DOCKER_USER}/${APP_NAME}:${IMAGE_TAG}
