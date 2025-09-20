@@ -4,7 +4,6 @@ pipeline {
             label 'My-Jenkins-Agent'
         }
     }
-    //agent any
     tools {
         maven 'Maven3'
         jdk 'Java21'
@@ -12,17 +11,16 @@ pipeline {
     stages {
         stage('SCM GitHub') {
             steps {
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/mimaraslan/devops-03-pipeline-aws']])
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/kaan-devv/devops-03-pipeline-aws']])
             }
         }
         stage('Test Maven') {
             steps {
                 script {
                     if (isUnix()) {
-                        // Linux or MacOS
                         sh 'mvn test'
                     } else {
-                        bat 'mvn test'  // Windows
+                        bat 'mvn test'
                     }
                 }
             }
@@ -38,20 +36,29 @@ pipeline {
                 }
             }
         }
-        stage("SonarQube Analysis") {
+        stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') {
+                    withSonarQubeEnv('MySonarQubeServer') {
                         if (isUnix()) {
-                            // Linux or MacOS
-                            sh "mvn sonar:sonar"
+                            sh 'mvn sonar:sonar'
                         } else {
-                            bat 'mvn sonar:sonar'  // Windows
+                            bat 'mvn sonar:sonar'
                         }
                     }
                 }
             }
         }
+        stage("Quality Gate"){
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
+                }
+            }
+        }
+    }
+
+
         /*
 
          stage('Docker Image') {
@@ -99,5 +106,5 @@ pipeline {
          }
 
  */
-    }
+
 }
