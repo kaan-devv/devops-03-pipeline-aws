@@ -1,4 +1,4 @@
-====================================== !!!ATTENTION!!! =============================================
+================================== !!!ATTENTION!!! =========================================
 This Project was created by Mimar Aslan and contains information I personally gained from the DevOps course he provided.
 
 DevOps Pipeline
