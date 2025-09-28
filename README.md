@@ -1,41 +1,26 @@
-# DevOps Pipeline
+========================================== !!!ATTENTION!!! =================================================
+This Project was created by Mimar Aslan and contains information I personally gained from the DevOps course he provided.
 
-## CI/CD Evreni
+DevOps Pipeline
+CI/CD Universe
+CI/CD: (Jenkins, Git, GitHub, GitOps, GitHub Actions, GitLab, GitLab CI, Bitbucket, Bamboo) Scripting (Python, Bash, PowerShell) Containers: (Docker) Orchestration: (Kubernetes, Helm) Cloud (AWS, Azure, GCP) Virtualization: (VMware, VirtualBox) IaC: (Terraform, Ansible, CloudFormation) Monitoring: (Prometheus, Grafana, ELK)
 
-```
+objectivec
 
-CI/CD:           (Jenkins, Git,  GitHub, GitOps,  GitHub Actions,    GitLab, GitLab CI,    Bitbucket, Bamboo)
-Scripting        (Python, Bash, PowerShell)
-Containers:      (Docker)
-Orchestration:   (Kubernetes, Helm)
-Cloud            (AWS, Azure, GCP)
-Virtualization:  (VMware, VirtualBox)
-IaC:             (Terraform, Ansible, CloudFormation)
-Monitoring:      (Prometheus, Grafana, ELK)
-```
-
-<hr>
-
-
-
-AWS CLI kurulacak.
+AWS CLI will be installed.
 
 https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
-```
 aws --version
-```
 
+shell
 
-#### MacOS
-
-```
-ls -la ~/
-mv ~/Downloads/MyAWSKeyPair.pem ~/.ssh/
-chmod 400 ~/.ssh/MyAWSKeyPair.pem
+MacOS
+ls -la ~/ mv ~/Downloads/MyAWSKeyPair.pem ~/.ssh/ chmod 400 ~/.ssh/MyAWSKeyPair.pem
 
 nano ~/.ssh/config
-```
+
+mathematica
 
 Host MyDevOpsAWS
 HostName PUBLIC_IP
@@ -46,377 +31,272 @@ Ctrl + O
 Enter
 Ctrl + X
 
-```
 ssh MyAWSKeyPair
-```
 
-<hr>
+yaml
 
-## === Makine 1: My Jenkins Master ============================
-
+=== Machine 1: My Jenkins Master ============================
 Windows
-MobaXterm üzerinden Session -> SSH oluşturacağız.
+We will create a Session -> SSH via MobaXterm.
 
+Run these 2 commands in the terminal sequentially.
 
-Terminalden bu 2 komutu sırayla çalıştıracağız.
+sudo apt update sudo apt upgrade -y
 
-```
-sudo apt update
+yaml
 
-sudo apt upgrade  -y
-```
+We will assign a name instead of the internal IP.
 
-===============================
-
-İç IP adının yerine bir isim vereceğiz.
-```
 sudo nano /etc/hostname
-```
-isim olarak aşağıdakini yazdık.
+
+pgsql
+
+We wrote the following as the name:
 
 My-Jenkins-Master
 
+Press Ctrl + X.
+Press Y to confirm.
+Finally, press Enter.
 
-Ctrl + X'e bas.
-Onaylamak için Y harfine bas.
-En sonda da Enter'a bas.
+or
 
-veya
+Press Ctrl + O.
+Finally, press Enter.
 
-Ctrl + O'ya bas.
-En sonda da Enter'a bas.
+Restart the machine.
 
+sudo init 6
 
+nginx or sudo reboot
 
-Makineyi yeniden başlat.
+yaml
 
-```
-sudo init 6     
-```
-ya da       
-```
-sudo reboot
-```
+AWS EC2 machine was opened to the outside world.
+We went to the Security groups section.
+We allowed external access from port 8080.
 
-<hr>
-===============================
+======= We will install Java. ========================
 
-AWS EC2 makinemi dış dünyaya açtık.
-Security groups kısmına gittik.
-Dışarıdan 8080 portundan erişime izin verdik.
+Type Java into the terminal and press Enter. Take one of the commands that appear and run it.
 
-<hr>
-======= Java'yı kuracağız.========================
+sudo apt install openjdk-21-jre -y java --version
 
-Terminale Java yaz ve enter'a bas. Açılan komutlardan birini al ve çalıştır.
+yaml
 
-```
-sudo apt install openjdk-21-jre  -y
-
-java --version
-```
-
-<hr>
-=======Jenkins'i kuracağız.========================
+======= We will install Jenkins. ========================
 
 https://www.jenkins.io/doc/book/installing/linux/
 
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null sudo apt-get update sudo apt-get install jenkins -y
 
-```
-sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
-https://pkg.jenkins.io/debian/jenkins.io-2023.key
-echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
-https://pkg.jenkins.io/debian binary/ | sudo tee \
-/etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt-get update
-sudo apt-get install jenkins  -y
-```
+pgsql
 
+Run the following commands sequentially.
+We dedicate this machine to Jenkins.
+When we shut down and restart the machine, Jenkins will automatically be running.
 
+sudo systemctl enable jenkins sudo systemctl start jenkins sudo systemctl status jenkins
 
+pgsql
 
-Aşağıdaki komutları sırasıyla çalıştıracağız.
-Bu makineyi Jenkins'e adıyoruz.
-Makineyi kapatıp açtığımızda Jenkins otomatik olarak çalışır durumda olacak.
-
-```
-sudo systemctl enable jenkins
-sudo systemctl start jenkins
-sudo systemctl status jenkins
-```
-
-
-Bu terminal'i kapatmadım sadece o durumdan çıktım. Terminalim açık.
+I did not close this terminal, I only exited that state. My terminal is open.
 Ctrl + C
 
-Terminalime bu komutu yazıp Jenkins'in admin parolasını öğrendik.
+Type this command in my terminal and we learned Jenkins' admin password.
 
-```
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-```
 
+yaml
 
-
-<hr>
-
-## === Makine 2: My Jenkins Agent ============================
-
-Bu makine Docker'a özeldir.
-
+=== Machine 2: My Jenkins Agent ============================
+This machine is dedicated to Docker.
 
 Windows
-MobaXterm üzerinden Session -> SSH oluşturacağız.
+We will create a Session -> SSH via MobaXterm.
 
+Run these 2 commands in the terminal sequentially.
 
-Terminalden bu 2 komutu sırayla çalıştıracağız.
+sudo apt update sudo apt upgrade -y
 
-```
-sudo apt update
+yaml
 
-sudo apt upgrade  -y
-```
+We will assign a name instead of the internal IP.
 
-<hr>
-===============================
-
-İç IP adının yerine bir isim vereceğiz.
-
-```
 sudo nano /etc/hostname
-```
 
-isim olarak aşağıdakini yazdık.
+pgsql
+
+We wrote the following as the name:
 
 My-Jenkins-Agent
 
+Press Ctrl + X.
+Press Y to confirm.
+Finally, press Enter.
 
-Ctrl + X'e bas.
-Onaylamak için Y harfine bas.
-En sonda da Enter'a bas.
+Restart the machine.
 
+sudo init 6
 
-Makineyi yeniden başlat.
+nginx or sudo reboot
 
-```
-sudo init 6     
-```
+yaml
 
-ya da       
+======= We will install Java. ========================
 
-```
-sudo reboot
-```
+Type Java into the terminal and press Enter. Take one of the commands that appear and run it.
 
+sudo apt install openjdk-21-jre -y java --version java -version
 
-<hr>
-=======Java'yı kuracağız.========================
+yaml
 
-Terminale Java yaz ve enter'a bas. Açılan komutlardan birini al ve çalıştır.
+===== We will install Docker. ==========================
 
-```
-sudo apt install openjdk-21-jre  -y
+Come to the terminal, just type docker and press Enter.
 
-java --version
+sudo apt install docker.io -y sudo usermod -aG docker $USER sudo reboot
 
-java -version
-```
+yaml
 
+We will connect the machines to each other.
 
-<hr>
-===== Docker kuracağız. ==========================
+=== For My Jenkins Master ============================
 
-Terminale gelip sadece docker yaz ve enter'a.
+sudo nano /etc/ssh/sshd_config
 
-```
-sudo apt  install docker.io  -y
+yaml
 
-sudo usermod -aG docker $USER
+Go to the Authentication section.
+Remove the comment sign # in front of the following two lines.
 
-sudo reboot
-```
+Authentication:
+PubkeyAuthentication yes AuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys2
 
+vbnet
 
-<hr>
-Makineleri birbirne tanıtacağız.
+Press Ctrl + X.
+Press Y to confirm.
+Finally, press Enter.
 
-=== My Jenkins Master için ============================
-
-```
-sudo nano  /etc/ssh/sshd_config
-```
-
-Authentication kısmına gel.
-Aşağıdaki şu iki satırın önündeki açıklama işaretini # kaldır.
-
-<hr>
-### Authentication:
-
-```
-PubkeyAuthentication yes
-
-AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
-```
-
-Ctrl + X'e bas.
-Onaylamak için Y harfine bas.
-En sonda da Enter'a bas.
-
-```
 sudo service sshd reload
-```
 
-<hr>
-=== My Jenkins Agent için ============================
+yaml
 
-```
-sudo nano  /etc/ssh/sshd_config
-```
-Authentication kısmına gel.
-Aşağıdaki şu iki satırın önündeki açıklama işaretini # kaldır.
+=== For My Jenkins Agent ============================
 
+sudo nano /etc/ssh/sshd_config
 
-<hr>
-### Authentication:
+yaml
 
-```
-PubkeyAuthentication yes
+Go to the Authentication section.
+Remove the comment sign # in front of the following two lines.
 
-AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
-```
+Authentication:
+PubkeyAuthentication yes AuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys2
 
-Ctrl + X'e bas.
-Onaylamak için Y harfine bas.
-En sonda da Enter'a bas.
+vbnet
 
-```
+Press Ctrl + X.
+Press Y to confirm.
+Finally, press Enter.
+
 sudo service sshd reload
-```
 
-<hr>
-=== My Jenkins Master için ============================
+yaml
 
-```
-pwd
+=== For My Jenkins Master ============================
 
-cd /home/ubuntu
-```
+pwd cd /home/ubuntu
 
-Master makinenin takip edilebilmesi için bir şifre anahtar oluşturuyorum.
+css
 
-```
-ssh-keygen
+I am creating a password key for the master machine to be tracked.
 
+ssh-keygen cd /home/ubuntu/.ssh/ ll sudo cat id_ed25519.pub
 
-cd /home/ubuntu/.ssh/
+scss
 
-ll
+Take and copy the line written inside.
 
-
-sudo cat  id_ed25519.pub
-```
-
-İçindeki böyle yazan satırı alıp kopyalayın.
-
-```
 ssh-ed25519 AAAAAAAAAAAAAAAAA ubuntu@My-Jenkins-Master
-```
 
+yaml
 
-Sonuna kadar enter'a basıp geç.
+Press Enter until the end.
 
+=== For My Jenkins Agent ============================
 
-<hr>
-=== My Jenkins Agent için ============================
+cd /home/ubuntu/.ssh/ ll sudo cat authorized_keys
 
-```
-cd /home/ubuntu/.ssh/
+kotlin
 
-ll
+Open this file.
 
-sudo cat authorized_keys
-```
-
-Bu dosyanın için aç.
-```
 sudo nano authorized_keys
-```
 
-Master'dan aldığın şu satırı en alta yapıştır.
+yaml
+
+Paste the following line copied from Master at the very bottom.
 
 ssh-ed25519 AAAAAAAAAAAAAAAAA ubuntu@My-Jenkins-Master
 
-<hr>
-==== Agent Takip eden taraf ===
+==== The side following the Agent ====
 
 ssh-rsa BBBBBBBBBBBBBBBBBB MyAWSKeyPair
 
-<hr>
-==== Master'dan getirdiğim keygen anahtar takip edilecek taraf ===
+==== The keygen key from Master to be followed ====
 
 ssh-ed25519 AAAAAAAAAAAAAAAAA ubuntu@My-Jenkins-Master
 
-Ctrl + X'e bas.
-Onaylamak için Y harfine bas.
-En sonda da Enter'a bas.
+Press Ctrl + X.
+Press Y to confirm.
+Finally, press Enter.
 
-```
-cd /home/ubuntu/.ssh/
+cd /home/ubuntu/.ssh/ sudo cat authorized_keys
 
-sudo cat authorized_keys
-```
+yaml
 
-<hr>
+Restart both Master and Agent machines.
 
-Master ve Agent makinelerini yeniden başlat.
-
-```
 sudo reboot
-```
 
-<hr>
+yaml
+
 ======================================
 http://PUBLIC_IP:8080/computer/(built-in)/configure
 
-Jenkins'i aç.
-Nodes kısmına gel.
+Open Jenkins.
+Go to the Nodes section.
 
-Built-In Node makinesinin içine gir.
+Enter the Built-In Node machine.
 
 Nodes -> Built-In Node -> Configure
 
-Number of executors kısmını SIFIR 0 yap.
+Set the Number of executors to ZERO 0.
 
-
-
-Agent makineyi Jenkins'e eklemek için
+To add the Agent machine to Jenkins
 
 Nodes -> New node
 
 http://PUBLIC_IP:8080/computer/new
 
-Ona "My-Jenkins-Agent" diye bir isim verdik.
-Permanent Agent olduğunu seçtik.
+We gave it the name "My-Jenkins-Agent".
+We selected it as a Permanent Agent.
 
+When adding the Agent in Jenkins, you will take its own internal IP.
 
-Jenkins'te Agent'ı eklerken onun kendi iç IP'sini alacaksın.
+====== Read and copy this key from the Master Machine and come to Jenkins. For Credentials ====
 
-<hr>
-====== Master Makinedeki bu anahtarı okuyup kopyalayın ve Jenkins'e gelin. Credentials için ====
+cd /home/ubuntu/.ssh/ sudo cat id_ed25519
 
-```
-cd  /home/ubuntu/.ssh/
-sudo cat id_ed25519
-```
+yaml
 
 -----BEGIN OPENSSH PRIVATE KEY-----
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 -----END OPENSSH PRIVATE KEY-----
 
-
-
-
-<hr>
-GitHub Token oluşturacağız.
+We will create a GitHub Token.
 
 https://github.com/settings/tokens
 
@@ -424,346 +304,224 @@ MyGitHubTokenForAWS
 
 ghp_ABCABCABCABCABCABCABCABCABCABC
 
-
-<hr>
-
-## === Makine 3: SonarQube kurulumu ==========
-
-
+=== Machine 3: SonarQube Installation ==========
 Windows
-MobaXterm üzerinden Session -> SSH oluşturacağız.
+We will create a Session -> SSH via MobaXterm.
 
+Run these 2 commands in the terminal sequentially.
 
-Terminalden bu 2 komutu sırayla çalıştıracağız.
+sudo apt update sudo apt upgrade -y
 
-```
-sudo apt update
+yaml
 
-sudo apt upgrade  -y
-```
+We will assign a name instead of the internal IP.
 
-===============================
-
-İç IP adının yerine bir isim vereceğiz.
-```
 sudo nano /etc/hostname
-```
 
-isim olarak aşağıdakini yazdık.
+yaml
+
+We wrote the following as the name:
 
 My-SonarQube
 
-<hr>
-
-### ÖDEV : hostname'i tek komutla değiştirmeyi bulun.
-
-```
+HOMEWORK: Find a way to change the hostname with a single command.
 sudo hostname My-SonarQube
-```
-<hr>
 
+yaml
 
-Ctrl + X'e bas.
-Onaylamak için Y harfine bas.
-En sonda da Enter'a bas.
+Press Ctrl + X.
+Press Y to confirm.
+Finally, press Enter.
 
-Makineyi yeniden başlat.
-```
+Restart the machine.
+
 sudo reboot
-```
 
-<hr>
-====  PostgreSQL kurulumu  =====
+yaml
 
-```
+==== PostgreSQL Installation =====
 
-sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
 
-wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+sudo apt update sudo apt-get -y install postgresql postgresql-contrib
 
-
-
-sudo apt update
-
-sudo apt-get -y install postgresql postgresql-contrib
-
-
-
-
-sudo systemctl enable postgresql
-
-sudo systemctl status postgresql
-
+sudo systemctl enable postgresql sudo systemctl status postgresql
 
 sudo passwd postgres
-```
-parola: 123456789
 
+yaml
 
-<hr>
-=== Veritabanına terminalden en baş yetkili olarak giriş yapmak istiyorum.
+password: 123456789
 
-```
+=== I want to log into the database terminal as the top authority.
+
 su - postgres
-```
 
-parola: 123456789
+makefile
 
+password: 123456789
 
+createuser sonar psql ALTER USER sonar WITH ENCRYPTED password 'sonar'; CREATE DATABASE sonarqube OWNER sonar; grant all privileges on DATABASE sonarqube to sonar; \q exit
 
-```
-createuser sonar
+yaml
 
-psql
-
-ALTER USER sonar WITH ENCRYPTED password 'sonar';
-
-CREATE DATABASE sonarqube OWNER sonar;
-
-grant all privileges on DATABASE sonarqube to sonar;
-
-\q
-
-exit
-```
-
-
-
-
-<hr>
 ==== Adoptium repository ====
 
-```
-sudo bash
+sudo bash wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
 
-wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
+sudo apt update sudo apt install temurin-17-jdk -y
 
-echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+pgsql
 
+The following command also does the same job.
 
+sudo apt-get install temurin-17-jdk -y
 
-sudo apt update
+yaml
 
-sudo apt     install temurin-17-jdk  -y
+JDK already exists. We will install JRE just as an example.
 
-```
-
-Aşağıdaki komutta aynı işi yapar.
-
-```
-sudo apt-get install temurin-17-jdk  -y
-```
-
-<hr>
-
-JDK zaten var. JRE bunu sadece örnek olsun diye kuracağız. 
-
-```
 sudo apt install openjdk-17-jre -y
-```
 
-<hr>
-Java'nın alternatif sürümleri seçmek için
+yaml
 
-```
-sudo update-alternatives --config java
+To select alternative versions of Java:
 
-java --version
-```
+sudo update-alternatives --config java java --version
 
+yaml
 
+=== We will increase Linux kernel limits. ===
+== Vim and Nano are for writing inside files from the terminal.
 
-<hr>
-
-### === Linux kernel sınırlarını genişleteceğiz. ===
-
-<hr>
-
-== Vim ve Nano terminalden dosyaların içine yazı yazmak içindir.
-
-```
 sudo vim /etc/security/limits.conf
-```
 
-Bir şey eklemek için önce klavyeden i tuşuna bas.
+yaml
 
-<hr>
-== Nano ile çalışmak daha kolaydır.
+To add something, first press the i key on the keyboard.
 
-```
+== It is easier to work with Nano.
+
 sudo nano /etc/security/limits.conf
-```
 
-<hr>
-== Bu iki satırı dosyanın en altına ekle yapıştır.
+yaml
 
-```
-sonarqube   -   nofile   65536
-sonarqube   -   nproc    4096
-```
+== Add the following two lines at the very bottom of the file.
 
-çıkış için ESC tuşuna bas.
-:wq  yaz ve enter'a bas.
+sonarqube - nofile 65536 sonarqube - nproc 4096
 
+vbnet
 
+To exit, press the ESC key.
+Type :wq and press Enter.
 
-```
 sudo vim /etc/sysctl.conf
-```
-Bir şey eklemek için önce klavyeden i tuşuna bas.
-Eklenecek bilgi aşağıdaki satır.
-```
+
+vbnet
+
+To add something, first press the i key.
+The line to be added is:
+
 vm.max_map_count = 262144
-```
 
-Çıkış için ESC tuşuna bas.
-:wq  yaz
+pgsql
 
+To exit, press the ESC key.
+Type :wq and press Enter.
 
-Makineyi yeniden başlat.
-```
+Restart the machine.
+
 sudo reboot
-```
 
-<hr>
+yaml
 
-### ==== Sonarqube kurulumu  =====
+==== SonarQube Installation =====
+pwd cd /opt sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-25.9.0.112764.zip
 
-```
-pwd
+kotlin
 
-cd /opt
+== To unzip a compressed file in Ubuntu, I installed this application.
 
-sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-25.9.0.112764.zip
-```
+sudo apt install unzip sudo unzip sonarqube-25.9.0.112764.zip -d/opt pwd sudo mv /opt/sonarqube-25.9.0.112764 /opt/sonarqube
 
-== Ziplenmiş bir dosyayı ubuntuda açkmak için bu uygulamayı indirdim.
-```
-sudo apt install unzip
+yaml
 
+=== A sonar user will be created and permissions will be granted
 
-sudo unzip sonarqube-25.9.0.112764.zip -d/opt
+sudo groupadd sonar sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar sudo chown sonar:sonar /opt/sonarqube -R
 
-pwd
+yaml
 
-sudo mv   /opt/sonarqube-25.9.0.112764    /opt/sonarqube
+=== Connect this sonar user with the database
 
-```
-
-
-<hr>
-=== sonar kullanıcı oluşturulacak ve haklar verilecek
-
-```
-sudo groupadd sonar
-
-sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar
-
-sudo chown sonar:sonar /opt/sonarqube -R
-```
-
-<hr>
-=== Veritabanıyla bu sonar kullanıcısı konuştur
-
-```
 sudo vim /opt/sonarqube/conf/sonar.properties
 
-sonar.jdbc.username=sonar
-sonar.jdbc.password=sonar
+sonar.jdbc.username=sonar sonar.jdbc.password=sonar sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
 
-sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+yaml
 
-```
+=== We will create the Sonar service.
 
-<hr>
-=== Sonar servisini oluşturacağız.
-
-```
 sudo vim /etc/systemd/system/sonar.service
-```
 
-Aşağıdaki kodları olduğu gibi bu dosyanın içine yapıştır.
+csharp
 
+Paste the following codes exactly into this file.
 
-```
+[Unit] Description=SonarQube service After=syslog.target network.target
 
-[Unit]
-Description=SonarQube service
-After=syslog.target network.target
+[Service] Type=forking
 
-[Service]
-Type=forking
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
 
-ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
-ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+User=sonar Group=sonar Restart=always
 
-User=sonar
-Group=sonar
-Restart=always
+LimitNOFILE=65536 LimitNPROC=4096
 
-LimitNOFILE=65536
-LimitNPROC=4096
+[Install] WantedBy=multi-user.target
 
-[Install]
-WantedBy=multi-user.target
+less
 
-```
+Commands to automatically run SonarQube when the machine starts:
 
-Makine açıldığında sonarqube otomatik olarak çalıştırma komutları
+sudo systemctl enable sonar sudo systemctl start sonar sudo systemctl status sonar
 
-```
-sudo systemctl enable sonar
+yaml
 
-sudo systemctl start sonar
+=== Log tracking ===
 
-sudo systemctl status sonar
-```
-
-
-
-<hr>
-=== Log takibi ===
-
-```
 sudo tail -f /opt/sonarqube/logs/sonar.log
-```
 
-Makinenin public ip değerini al ve 9000 portundan giriş yap.
-```
-kullanıcı: admin
-parola: admin
-```
-Yeni parloyı verdim.
+vbnet
+
+Take the public IP value of the machine and log in via port 9000.
+
+username: admin password: admin
+
+yaml
+
+I gave a new password.
 
 Adana_01Adana_01
 
+Create a token for Jenkins.
 
-<hr>
-Jenkins için token oluştur.
+Administrator -> Security
 
-Administrator  -> Security
-
-http://SONARQUBE_MAKINENIN_PUBLIC_IPsi:9000/account/security
-
-
+http://SONARQUBE_MACHINE_PUBLIC_IP:9000/account/security
 
 jenkins-sonarqube-token
 
 sqa_EEEEEEEEEEEEEEEEEEEEEEEEEEE
 
+Save jenkins-sonarqube-token as Security Text inside Jenkins.
 
+Install SonarQube plugins.
 
-Jenkins içinde jenkins-sonarqube-token'ı Security Text olarak kaydettir.
+Go into the System side and configure the SonarQube settings.
 
+Introduce Sonar Scanner as a Tool.
 
-SonarQube pluginlerini kur.
+Copy the Private IPv4 address value of the machine where Sonar is installed.
 
-System tarafına gir ve SonarQube ayarlarını yap.
-
-Tool olarak Sonar Scanner'i tanıt.
-
-Sonar'ın kurulduğu makinenin Private IPv4 addresses değerini kopayla.
-
-
-http://JENKINS_MASTER_MAKINENIN_PUBLIC_IPsi:8080/
-
+http://JENKINS_MASTER_MACHINE_PUBLIC_IP:8080/
